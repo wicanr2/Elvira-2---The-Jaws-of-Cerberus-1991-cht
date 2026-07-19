@@ -21,6 +21,10 @@ on:
   push:
     tags: ['v*-macos']
 
+# 讓打 tag 時「附加到 Release」步驟(softprops/action-gh-release)能建 release
+permissions:
+  contents: write
+
 env:
   SCUMMVM_TAG: "v2.9.1"
   SDL_VER: "2.30.9"
