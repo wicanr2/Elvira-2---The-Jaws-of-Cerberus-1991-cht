@@ -7,12 +7,11 @@ PROJ="/home/anr2/scummvm/elvira_2_cht/workplace"
 docker run --rm -v "$PROJ:/work" -w /work/promo agos-capture bash -c '
 set -e
 FONT=/usr/share/fonts/opentype/noto/NotoSerifCJK-Bold.ttc
-# 標題卡
+# 標題卡: 用設計 logo 合成到 640x400 深底 + 副標
 convert -size 640x400 xc:"#0a0605" \
-  -fill "#c01018" -font "$FONT" -pointsize 54 -gravity center -annotate +0-70 "艾薇拉 II" \
-  -fill "#e8b020" -font "$FONT" -pointsize 62 -gravity center -annotate +0+0 "恐怖劇場" \
-  -fill "#d8d0c0" -font "$FONT" -pointsize 22 -gravity center -annotate +0+70 "Elvira II: The Jaws of Cerberus · 繁體中文版" \
-  -fill "#9a9488" -font "$FONT" -pointsize 16 -gravity south -annotate +0+30 "1991 Horror Soft / Accolade · ScummVM AGOS 補丁 · 原版配樂" out_title.png
+  \( /work/docs/img/logo/logo_dark.png -resize 620x \) -gravity center -geometry +0-24 -composite \
+  -fill "#d8d0c0" -font "$FONT" -pointsize 18 -gravity south -annotate +0+46 "繁體中文版 · ScummVM AGOS 補丁" \
+  -fill "#8a8478" -font "$FONT" -pointsize 14 -gravity south -annotate +0+22 "1991 Horror Soft / Accolade · 原版配樂" out_title.png
 mk(){ convert -size 640x400 xc:"#0a0605" \
     -fill "#c01018" -font "$FONT" -pointsize 44 -gravity center -annotate +0-30 "$2" \
     -fill "#d8d0c0" -font "$FONT" -pointsize 22 -gravity center -annotate +0+40 "$3" out_$1.png; }
