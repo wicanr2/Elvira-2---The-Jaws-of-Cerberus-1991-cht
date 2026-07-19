@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" width="1200" height="620">
+  <defs>
+    <linearGradient id="magenta" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0"   stop-color="#ff7ad9"/>
+      <stop offset="0.32" stop-color="#f43ab6"/>
+      <stop offset="0.62" stop-color="#c4148f"/>
+      <stop offset="1"   stop-color="#6f1580"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffe9a8"/>
+      <stop offset="0.5" stop-color="#e8b020"/>
+      <stop offset="1" stop-color="#a86e10"/>
+    </linearGradient>
+    <linearGradient id="blood" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c8121e"/>
+      <stop offset="1" stop-color="#63000a"/>
+    </linearGradient>
+    <radialGradient id="ember" cx="0.5" cy="0.5" r="0.6">
+      <stop offset="0"   stop-color="#ff5a12" stop-opacity="0.55"/>
+      <stop offset="0.4" stop-color="#c21a10" stop-opacity="0.30"/>
+      <stop offset="1"   stop-color="#c21a10" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bg" cx="0.5" cy="0.42" r="0.85">
+      <stop offset="0" stop-color="#2c0810"/>
+      <stop offset="0.6" stop-color="#160309"/>
+      <stop offset="1" stop-color="#070206"/>
+    </radialGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+    <filter id="iceglow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="2"/>
+    </filter>
+    <clipPath id="mainClip">
+      <text x="600.0" y="360" font-family="Noto Sans CJK TC" font-weight="900"
+            font-size="206" letter-spacing="14"
+            text-anchor="middle" transform="skewX(-6)"
+            transform-origin="600.0 360">恐怖劇場</text>
+    </clipPath>
+  </defs>
+
+  <rect width="1200" height="620" fill="url(#bg)"/>
+  <ellipse cx="600.0" cy="320" rx="520" ry="240" fill="url(#ember)" filter="url(#soft)"/>
+  <g stroke="#8a0f10" stroke-linecap="round" fill="none" opacity="0.5">
+    <path d="M60 60 C 240 200, 470 350, 560 540" stroke-width="7"/>
+    <path d="M120 50 C 300 190, 520 340, 610 530" stroke-width="4"/>
+    <path d="M20 110 C 200 240, 420 390, 500 560" stroke-width="3"/>
+  </g>
+  <g stroke="#8a0f10" stroke-linecap="round" fill="none" opacity="0.4" transform="translate(1200,0) scale(-1,1)">
+    <path d="M60 60 C 240 200, 470 350, 560 540" stroke-width="6"/>
+    <path d="M120 50 C 300 190, 520 340, 610 530" stroke-width="3.5"/>
+  </g>
+
+  <text x="600.0" y="132" font-family="Noto Sans CJK TC" font-weight="900" font-size="74"
+        letter-spacing="26" text-anchor="middle" fill="none" stroke="#1a0206"
+        stroke-width="9" paint-order="stroke" stroke-linejoin="round">艾薇拉 II</text>
+  <text x="600.0" y="132" font-family="Noto Sans CJK TC" font-weight="900" font-size="74"
+        letter-spacing="26" text-anchor="middle" fill="url(#gold)">艾薇拉 II</text>
+
+  <g transform="skewX(-6)" transform-origin="600.0 360">
+    <text x="609.9" y="369.9" font-family="Noto Sans CJK TC" font-weight="900" font-size="206" letter-spacing="14" text-anchor="middle" fill="#3a0210">恐怖劇場</text>
+<text x="609.0" y="369.0" font-family="Noto Sans CJK TC" font-weight="900" font-size="206" letter-spacing="14" text-anchor="middle" fill="#3a0210">恐怖劇場</text>
+<text x="608.1" y="368.1" font-family="Noto Sans CJK TC" font-weight="900" font-size="206" letter-spacing="14" text-anchor="middle" fill="#3a0210">恐怖劇場</text>
+<text x="607.2" y="367.2" font-family="Noto Sans CJK TC" font-weight="900" font-size="206" letter-spacing="14" text-anchor="middle" fill="#3a0210">恐怖劇場</text>
+<text x="606.3" y="366.3" font-family="Noto Sans CJK TC" font-weight="900" font-size="206" letter-spacing="14" text-anchor="middle" fill="#3a0210">恐怖劇場</text>
+<text x="605.4" y="365.4" font-family="Noto Sans CJK TC" font-weight="900" font-size="206" letter-spacing="14" text-anchor="middle" fill="#3a0210">恐怖劇場</text>
+<text x="604.5" y="364.5" font-family="Noto Sans CJK TC" font-weight="900" font-size="206" letter-spacing="14" text-anchor="middle" fill="#3a0210">恐怖劇場</text>
+<text x="603.6" y="363.6" font-family="Noto Sans CJK TC" font-weight="900" font-size="206" letter-spacing="14" text-anchor="middle" fill="#3a0210">恐怖劇場</text>
+<text x="602.7" y="362.7" font-family="Noto Sans CJK TC" font-weight="900" font-size="206" letter-spacing="14" text-anchor="middle" fill="#3a0210">恐怖劇場</text>
+<text x="601.8" y="361.8" font-family="Noto Sans CJK TC" font-weight="900" font-size="206" letter-spacing="14" text-anchor="middle" fill="#3a0210">恐怖劇場</text>
+<text x="600.9" y="360.9" font-family="Noto Sans CJK TC" font-weight="900" font-size="206" letter-spacing="14" text-anchor="middle" fill="#3a0210">恐怖劇場</text>
+    <text x="600.0" y="360" font-family="Noto Sans CJK TC" font-weight="900"
+          font-size="206" letter-spacing="14" text-anchor="middle"
+          fill="url(#magenta)" stroke="#0c0206" stroke-width="10"
+          paint-order="stroke" stroke-linejoin="round">恐怖劇場</text>
+    <text x="600.0" y="360" font-family="Noto Sans CJK TC" font-weight="900"
+          font-size="206" letter-spacing="14" text-anchor="middle"
+          fill="none" stroke="#3a0016" stroke-width="1.2">恐怖劇場</text>
+  </g>
+  <!-- 斜向白色高光條,clip 在主體字內(clip 已含 skew) -->
+  <g clip-path="url(#mainClip)">
+    <g fill="#ffffff">
+      <rect x="0" y="210" width="1200" height="11" opacity="0.5"
+            transform="rotate(-30 600.0 360)"/>
+      <rect x="0" y="174" width="1200" height="5" opacity="0.35"
+            transform="rotate(-30 600.0 360)"/>
+    </g>
+  </g>
+  <g opacity="0.95">
+    <path d="M363 430 C363 464.1, 370.5 492, 378 492 C385.5 492, 393 464.1, 393 430 C393 418.0, 363 418.0, 363 430 Z" fill="url(#blood)" stroke="#2a0004" stroke-width="1.5"/>
+    <circle cx="378" cy="506" r="6.0" fill="url(#blood)" stroke="#2a0004" stroke-width="1"/>
+    <path d="M544 432 C544 459.5, 550.0 482, 556 482 C562.0 482, 568 459.5, 568 432 C568 422.4, 544 422.4, 544 432 Z" fill="url(#blood)" stroke="#2a0004" stroke-width="1.5"/>
+    <circle cx="556" cy="496" r="4.8" fill="url(#blood)" stroke="#2a0004" stroke-width="1"/>
+    <path d="M731 428 C731 452.2, 736.5 472, 742 472 C747.5 472, 753 452.2, 753 428 C753 419.2, 731 419.2, 731 428 Z" fill="url(#blood)" stroke="#2a0004" stroke-width="1.5"/>
+    <circle cx="742" cy="486" r="4.4" fill="url(#blood)" stroke="#2a0004" stroke-width="1"/>
+    <path d="M886 430 C886 461.9, 893.0 488, 900 488 C907.0 488, 914 461.9, 914 430 C914 418.8, 886 418.8, 886 430 Z" fill="url(#blood)" stroke="#2a0004" stroke-width="1.5"/>
+    <circle cx="900" cy="502" r="5.6" fill="url(#blood)" stroke="#2a0004" stroke-width="1"/>
+  </g>
+
+  <g filter="url(#iceglow)">
+    <text x="600.0" y="522" font-family="Noto Serif CJK TC" font-style="italic" font-weight="700"
+          font-size="35" letter-spacing="7" text-anchor="middle"
+          fill="none" stroke="#0a1830" stroke-width="5" paint-order="stroke">ELVIRA II · THE JAWS OF CERBERUS</text>
+    <text x="600.0" y="522" font-family="Noto Serif CJK TC" font-style="italic" font-weight="700"
+          font-size="35" letter-spacing="7" text-anchor="middle" fill="#d6ecff">ELVIRA II · THE JAWS OF CERBERUS</text>
+  </g>
+</svg>

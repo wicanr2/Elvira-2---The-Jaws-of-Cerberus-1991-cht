@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 300" width="640" height="300">
+  <defs>
+    <linearGradient id="magenta2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ff8ce0"/>
+      <stop offset="0.45" stop-color="#f43ab6"/>
+      <stop offset="1" stop-color="#8a1786"/>
+    </linearGradient>
+    <linearGradient id="gold2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffe9a8"/>
+      <stop offset="1" stop-color="#c8901e"/>
+    </linearGradient>
+  </defs>
+
+  <text x="320.0" y="70" font-family="Noto Sans CJK TC" font-weight="900" font-size="44"
+        letter-spacing="16" text-anchor="middle" fill="none" stroke="#000" stroke-width="8"
+        paint-order="stroke" stroke-linejoin="round">艾薇拉 II</text>
+  <text x="320.0" y="70" font-family="Noto Sans CJK TC" font-weight="900" font-size="44"
+        letter-spacing="16" text-anchor="middle" fill="url(#gold2)">艾薇拉 II</text>
+
+  <g transform="skewX(-6)" transform-origin="320.0 200">
+    <text x="325.4" y="205.4" font-family="Noto Sans CJK TC" font-weight="900" font-size="132" letter-spacing="8" text-anchor="middle" fill="#2a0210">恐怖劇場</text>
+<text x="324.5" y="204.5" font-family="Noto Sans CJK TC" font-weight="900" font-size="132" letter-spacing="8" text-anchor="middle" fill="#2a0210">恐怖劇場</text>
+<text x="323.6" y="203.6" font-family="Noto Sans CJK TC" font-weight="900" font-size="132" letter-spacing="8" text-anchor="middle" fill="#2a0210">恐怖劇場</text>
+<text x="322.7" y="202.7" font-family="Noto Sans CJK TC" font-weight="900" font-size="132" letter-spacing="8" text-anchor="middle" fill="#2a0210">恐怖劇場</text>
+<text x="321.8" y="201.8" font-family="Noto Sans CJK TC" font-weight="900" font-size="132" letter-spacing="8" text-anchor="middle" fill="#2a0210">恐怖劇場</text>
+<text x="320.9" y="200.9" font-family="Noto Sans CJK TC" font-weight="900" font-size="132" letter-spacing="8" text-anchor="middle" fill="#2a0210">恐怖劇場</text>
+    <text x="320.0" y="200" font-family="Noto Sans CJK TC" font-weight="900" font-size="132"
+          letter-spacing="8" text-anchor="middle" fill="url(#magenta2)"
+          stroke="#000" stroke-width="9" paint-order="stroke" stroke-linejoin="round">恐怖劇場</text>
+  </g>
+
+  <text x="320.0" y="256" font-family="Noto Serif CJK TC" font-style="italic" font-weight="700"
+        font-size="21" letter-spacing="2" text-anchor="middle" fill="none" stroke="#06101f"
+        stroke-width="4.5" paint-order="stroke">The Jaws of Cerberus</text>
+  <text x="320.0" y="256" font-family="Noto Serif CJK TC" font-style="italic" font-weight="700"
+        font-size="21" letter-spacing="2" text-anchor="middle" fill="#d6ecff">The Jaws of Cerberus</text>
+</svg>
