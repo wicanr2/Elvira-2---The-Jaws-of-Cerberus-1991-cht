@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 PROJ="/home/anr2/scummvm/elvira_2_cht/workplace"
-docker run --rm -v "$PROJ:/work" -w /work/promo waxworks-capture bash -c '
+docker run --rm -v "$PROJ:/work" -w /work/promo agos-capture bash -c '
 set -e
 FONT=/usr/share/fonts/opentype/noto/NotoSerifCJK-Bold.ttc
 mk(){ # mk <out> <大字> <小字>
