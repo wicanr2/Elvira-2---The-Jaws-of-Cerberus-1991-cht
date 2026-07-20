@@ -13,6 +13,17 @@
   <em>開場第一句話，就是中文。</em>
 </p>
 
+## ▶ 推廣片
+
+實機畫面 + 原版配樂，30 秒帶你看它說中文的樣子：
+
+<p align="center">
+  <a href="https://youtu.be/Y_aRagpMOok">
+    <img src="https://img.youtube.com/vi/Y_aRagpMOok/hqdefault.jpg" width="480" alt="艾薇拉 II 恐怖劇場 繁體中文版 推廣片"><br>
+    ▶ 在 YouTube 觀看
+  </a>
+</p>
+
 ---
 
 ## 遊戲介紹 — 當年軟體世界的邀請函
