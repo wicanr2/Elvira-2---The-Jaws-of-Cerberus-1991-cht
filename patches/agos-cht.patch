@@ -1120,6 +1120,41 @@ index 1aa590b8..9b444177 100644
  	int x;
  	switch (_boxLineCount) {
  	case 1: x = _lineCounts[0];
+diff --git a/engines/agos/subroutine.cpp b/engines/agos/subroutine.cpp
+index 738744d7..97aa3715 100644
+--- a/engines/agos/subroutine.cpp
++++ b/engines/agos/subroutine.cpp
+@@ -519,6 +519,30 @@ void AGOSEngine::runSubroutine101() {
+ 
+ int AGOSEngine::startSubroutine(Subroutine *sub) {
+ 	int result = -1;
++
++	// 非上游: 繁中版自動通過 Elvira 2 兩處符號碼防拷 (SUB_1867 保全鍵盤 / SUB_1869
++	// 電子鎖門 —「對照手冊點正確符文」，沒實體手冊解不開、四次錯就結束遊戲)。
++	// 直接執行各自挑戰的成功分支 (ISNOT_ZERO [0] 的通過路徑)，跳過符號輸入。
++	// 等同 o_freezeZones 對 Simon 防拷的 bypass。
++	if (_chtActive && getGameType() == GType_ELVIRA2 && (sub->id == 1867 || sub->id == 1869)) {
++		_bitArrayTwo[91 / 16] &= ~(1 << (91 & 15));   // 兩者共通: CLEAR_BIT2 91
++		if (sub->id == 1867) {
++			// 保全鍵盤: 開門 <853> + 鍵盤 <803> 設狀態 2
++			Item *door = derefItem(853);
++			Item *keypad = derefItem(803);
++			if (door)
++				setDoorState(door, 0, 1);
++			if (keypad)
++				setItemState(keypad, 2);
++		} else {
++			// 電子鎖門: CLEAR_BIT2 [193] + CLEAR_BIT 19
++			uint b2 = (uint)readVariable(193);
++			_bitArrayTwo[b2 / 16] &= ~(1 << (b2 & 15));
++			setBitFlag(19, false);
++		}
++		return result;
++	}
++
+ 	SubroutineLine *sl = (SubroutineLine *)((byte *)sub + sub->first);
+ 
+ 	const byte *old_code_ptr = _codePtr;
 diff --git a/engines/agos/vga.cpp b/engines/agos/vga.cpp
 index 15eb01c4..cc2b5c46 100644
 --- a/engines/agos/vga.cpp
