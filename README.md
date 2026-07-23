@@ -181,6 +181,7 @@ AGOS 引擎（Elvira 1/2、Waxworks、Simon 1/2）的文字渲染是為英文小
 | [原始發行版本考](docs/ELVIRA2_RELEASES.md) | Elvira 2 當年 DOS/Amiga/ST/C64 各版、五語在地化、ScummVM 指紋、為何本專案基於 floppy 英文版 |
 | [中文密碼盤（線上還原）](https://wicanr2.github.io/Elvira-2---The-Jaws-of-Cerberus-1991-cht/codewheel/) | 當年防拷三層密碼盤的線上還原：中文中心、三層可轉動、幾何視窗透視真實數字、附解謎小遊戲 |
 | [手冊要點索引](docs/MANUAL.md) | 開場流程、四職業、八屬性、法術調配、友善化熱鍵（整理自軟體世界中文說明書）|
+| [手冊附錄：法術說明 · 開場提示](docs/MANUAL_APPENDIX.md) | 附錄一：10 級全法術表（名稱／法力／材料／效力）；附錄二：開場流程 13 點提示（整理自珍147 手冊）|
 | [開發環境重建指南](docs/DEV_SETUP.md) | 佈局、改譯文重烘、改引擎重生 patch、headless 驗證、打包 |
 | [背景研究資料](docs/elvira2_research.md) | 劇情、人物、系統、當年評價（含來源）|
 
