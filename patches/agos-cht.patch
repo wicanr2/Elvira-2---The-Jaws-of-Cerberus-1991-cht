@@ -127,7 +127,7 @@ index 6a8d2237..079e7683 100644
  
  	byte *allocBlock(uint32 size);
 diff --git a/engines/agos/charset-fontdata.cpp b/engines/agos/charset-fontdata.cpp
-index 193986e3..81bbda22 100644
+index 193986e3..45acf135 100644
 --- a/engines/agos/charset-fontdata.cpp
 +++ b/engines/agos/charset-fontdata.cpp
 @@ -22,6 +22,7 @@
@@ -138,7 +138,7 @@ index 193986e3..81bbda22 100644
  
  #include "agos/agos.h"
  #include "agos/intern.h"
-@@ -2914,6 +2915,478 @@ static const byte english_pnFont[] = {
+@@ -2914,6 +2915,482 @@ static const byte english_pnFont[] = {
  	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
  };
  
@@ -274,34 +274,38 @@ index 193986e3..81bbda22 100644
 +	return (byte)best;
 +}
 +
-+// 板圖顯示時,蓋掉已取走的物品(限「當前確實顯示的那些板」,避免跨場景誤蓋)。
++// 板圖近景顯示時,蓋掉已取走的物品。判定「當前是哪個板的近景」= 玩家所在容器(me()->parent):
++// 佈告欄近景的機制正是把玩家移進板容器(SUB_1085 用 o_here=me()->parent==item->parent 篩板上物品),
++// 故玩家所在容器 == 正在看的板。以此為 gate,只蓋該板已取走(parent 已非板)的物品,不誤觸其他場景。
 +void AGOSEngine::chtEraseTakenBoardItems() {
 +	if (!_chtActive || !_chtHires || !_scaleBuf || _chtBoardItems.empty())
 +		return;
-+	// 1. 掃當前 hitarea,找出畫面正顯示哪些板(present 的 drag+verb208 物品之 home 容器)。
-+	Common::HashMap<uint16, byte> shownBoards;
-+	for (int i = 0; i < 250; i++) {
-+		const HitArea *ha = &_hitAreas[i];
-+		if (!(ha->flags & kBFBoxInUse) || !(ha->flags & kBFDragBox) || !ha->itemPtr)
-+			continue;
-+		if ((ha->verb & ~0x4000) != 208)
-+			continue;
-+		shownBoards[ha->itemPtr->parent] = 1;
++	Item *player = me();
++	if (!player)
++		return;
++	uint16 board = player->parent;   // 近景時玩家「站在」板容器內
++	if (board == 0)
++		return;
++	// 只有玩家所在容器確實是某個記錄過的板,才作用(否則一般場景直接跳過)。
++	bool isBoardView = false;
++	for (Common::HashMap<uint32, ChtBoardItem>::iterator it = _chtBoardItems.begin();
++	     it != _chtBoardItems.end(); ++it) {
++		if (it->_value.home == board) { isBoardView = true; break; }
 +	}
-+	if (shownBoards.empty())
++	if (!isBoardView)
 +		return;
 +	const byte *bg = getBackGround();
 +	uint bgPitch = _backGroundBuf->pitch, bgW = _backGroundBuf->w, bgH = _backGroundBuf->h;
 +	byte *hp = (byte *)_scaleBuf->getPixels();
 +	uint hpitch = _scaleBuf->pitch;
-+	// 2. 記錄過的板物品:屬當前顯示的板、且已被取走(parent≠home) → 蓋掉其 2x 矩形。
++	// 屬當前板、且已被取走(parent≠板)的物品 → 用周邊軟木塞色蓋掉其 2x 矩形。
 +	for (Common::HashMap<uint32, ChtBoardItem>::iterator it = _chtBoardItems.begin();
 +	     it != _chtBoardItems.end(); ++it) {
 +		const ChtBoardItem &bi = it->_value;
-+		if (!shownBoards.contains(bi.home))
++		if (bi.home != board)
 +			continue;
 +		Item *item = derefItem(it->_key);
-+		if (!item || item->parent == bi.home)
++		if (!item || item->parent == board)
 +			continue;   // 還在板上,不蓋
 +		byte cork = chtSampleCork(bg, bgPitch, bgW, bgH, bi.x, bi.y, bi.w, bi.h);
 +		if (cork == 0)
