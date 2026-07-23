@@ -59,7 +59,7 @@ index af27f131..21900b4a 100644
  
  	if (getGameType() != GType_PP && getGameType() != GType_FF) {
 diff --git a/engines/agos/agos.h b/engines/agos/agos.h
-index 6a8d2237..2f36e4d0 100644
+index 6a8d2237..079e7683 100644
 --- a/engines/agos/agos.h
 +++ b/engines/agos/agos.h
 @@ -37,6 +37,7 @@
@@ -70,7 +70,7 @@ index 6a8d2237..2f36e4d0 100644
  #include "agos/detection.h"
  
  /**
-@@ -386,6 +387,30 @@ protected:
+@@ -386,6 +387,35 @@ protected:
  	bool _pause;
  	bool _speech;
  	bool _subtitles;
@@ -89,6 +89,11 @@ index 6a8d2237..2f36e4d0 100644
 +	int _chtVerbId = 0;       // 當前 verb 圖示條選中的 verb(ha->id)，供中文 overlay 每幀重繪
 +	Common::HashMap<uint32, byte> _chtVisited;   // 地圖探索迷霧: 走過的房間(room id)
 +
++	// 非上游: 佈告欄/告示板類「烘死美術上的可取物品」— 取走後原版不擦背景圖(item 仍畫在上面)，
++	// 記錄每件物品在板圖上的矩形+原始父容器，取走後(parent 變了)用周邊軟木塞色蓋掉。見 docs/NOTICE_BOARD_MECHANIC.md。
++	struct ChtBoardItem { uint16 x, y, w, h, home; };
++	Common::HashMap<uint32, ChtBoardItem> _chtBoardItems;   // itemId → 板上位置與原容器
++
 +	int _chtLastBigImg = 0;        // 最後繪製的大圖(zone*1000+image)，供 title 中文疊層辨識
 +	bool _chtTitleSeen = false;    // 已在 WAXWORKS logo 疊過中文
 +	bool _chtTitleDone = false;    // 已離開 title(閂鎖)，之後同號(1001)場景不再疊，避免與入口撞號
@@ -101,7 +106,7 @@ index 6a8d2237..2f36e4d0 100644
  	bool _vgaVar9;
  	int16 _chanceModifier;
  	bool _restoreWindow6;
-@@ -958,6 +983,16 @@ protected:
+@@ -958,6 +988,19 @@ protected:
  	void renderStringAmiga(uint vgaSpriteId, uint color, uint width, uint height, const char *txt);
  	void renderString(uint vgaSpriteId, uint color, uint width, uint height, const char *txt);
  
@@ -110,6 +115,9 @@ index 6a8d2237..2f36e4d0 100644
 +	byte chtReadableColor(byte idx);   // 亮度守門:只救暗到讀不到的字色
 +	byte chtOutlineColor();            // 描邊用最暗的非 0 索引
 +	void chtDrawMap();                 // 動態地圖(現代玩家友善化)
++	void chtRecordBoardItem(int id, int x, int y, int w, int h, uint16 home);  // 記錄板上可取物品位置
++	void chtEraseTakenBoardItems();    // 佈告欄類:蓋掉已取走物品的烘死美術
++	byte chtSampleCork(const byte *bg, uint pitch, uint w, uint h, int rx, int ry, int rw, int rh);  // 取物品外圈軟木塞色
 +	void chtDrawVerbName();            // verb 圖示條中文 overlay(蓋掉烘進 VGA 的英文)
 +	void chtDrawMapLabel(int x, int y, const char *big5);  // 地圖用 16px 中文標籤
 +	bool chtRoomHasTreasure(uint16 roomId);
@@ -119,7 +127,7 @@ index 6a8d2237..2f36e4d0 100644
  
  	byte *allocBlock(uint32 size);
 diff --git a/engines/agos/charset-fontdata.cpp b/engines/agos/charset-fontdata.cpp
-index 193986e3..a7a66fb5 100644
+index 193986e3..81bbda22 100644
 --- a/engines/agos/charset-fontdata.cpp
 +++ b/engines/agos/charset-fontdata.cpp
 @@ -22,6 +22,7 @@
@@ -130,7 +138,7 @@ index 193986e3..a7a66fb5 100644
  
  #include "agos/agos.h"
  #include "agos/intern.h"
-@@ -2914,6 +2915,399 @@ static const byte english_pnFont[] = {
+@@ -2914,6 +2915,478 @@ static const byte english_pnFont[] = {
  	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
  };
  
@@ -228,6 +236,85 @@ index 193986e3..a7a66fb5 100644
 +	}
 +	Common::Rect dirty(x, oy, x + fw, oy + fh);
 +	updateBackendSurface(&dirty);
++}
++
++// ===== 非上游: 佈告欄/告示板類「取走後蓋掉烘死美術」 =====
++// 根因見 docs/NOTICE_BOARD_MECHANIC.md: 板上物品畫在背景圖(PICTURE)上,取走只拿掉可點框、
++// 不擦圖。這裡在板圖顯示時,把「已取走(parent 已非原容器)」的物品用周邊軟木塞色蓋進 _scaleBuf。
++
++// 記錄一件「板上可取物品」的位置(present 被 defineBox 呼叫時才會進來)。
++void AGOSEngine::chtRecordBoardItem(int id, int x, int y, int w, int h, uint16 home) {
++	if (id <= 0 || w <= 0 || h <= 0)
++		return;
++	ChtBoardItem bi;
++	bi.x = (uint16)x; bi.y = (uint16)y; bi.w = (uint16)w; bi.h = (uint16)h; bi.home = home;
++	_chtBoardItems[(uint32)id] = bi;
++}
++
++// 取某物品矩形外圈(1–2px ring)最常見的非透明色 = 軟木塞底色。
++byte AGOSEngine::chtSampleCork(const byte *bg, uint pitch, uint w, uint h, int rx, int ry, int rw, int rh) {
++	int counts[256];
++	memset(counts, 0, sizeof(counts));
++	for (int m = 1; m <= 2; m++) {
++		int x0 = rx - m, y0 = ry - m, x1 = rx + rw + m - 1, y1 = ry + rh + m - 1;
++		for (int xx = x0; xx <= x1; xx++) {
++			if (xx < 0 || xx >= (int)w) continue;
++			if (y0 >= 0 && y0 < (int)h) counts[bg[y0 * pitch + xx]]++;
++			if (y1 >= 0 && y1 < (int)h) counts[bg[y1 * pitch + xx]]++;
++		}
++		for (int yy = y0; yy <= y1; yy++) {
++			if (yy < 0 || yy >= (int)h) continue;
++			if (x0 >= 0 && x0 < (int)w) counts[bg[yy * pitch + x0]]++;
++			if (x1 >= 0 && x1 < (int)w) counts[bg[yy * pitch + x1]]++;
++		}
++	}
++	int best = 0, bestC = 0;
++	for (int i = 1; i < 256; i++)   // 跳過 0(透明/黑哨兵)
++		if (counts[i] > bestC) { bestC = counts[i]; best = i; }
++	return (byte)best;
++}
++
++// 板圖顯示時,蓋掉已取走的物品(限「當前確實顯示的那些板」,避免跨場景誤蓋)。
++void AGOSEngine::chtEraseTakenBoardItems() {
++	if (!_chtActive || !_chtHires || !_scaleBuf || _chtBoardItems.empty())
++		return;
++	// 1. 掃當前 hitarea,找出畫面正顯示哪些板(present 的 drag+verb208 物品之 home 容器)。
++	Common::HashMap<uint16, byte> shownBoards;
++	for (int i = 0; i < 250; i++) {
++		const HitArea *ha = &_hitAreas[i];
++		if (!(ha->flags & kBFBoxInUse) || !(ha->flags & kBFDragBox) || !ha->itemPtr)
++			continue;
++		if ((ha->verb & ~0x4000) != 208)
++			continue;
++		shownBoards[ha->itemPtr->parent] = 1;
++	}
++	if (shownBoards.empty())
++		return;
++	const byte *bg = getBackGround();
++	uint bgPitch = _backGroundBuf->pitch, bgW = _backGroundBuf->w, bgH = _backGroundBuf->h;
++	byte *hp = (byte *)_scaleBuf->getPixels();
++	uint hpitch = _scaleBuf->pitch;
++	// 2. 記錄過的板物品:屬當前顯示的板、且已被取走(parent≠home) → 蓋掉其 2x 矩形。
++	for (Common::HashMap<uint32, ChtBoardItem>::iterator it = _chtBoardItems.begin();
++	     it != _chtBoardItems.end(); ++it) {
++		const ChtBoardItem &bi = it->_value;
++		if (!shownBoards.contains(bi.home))
++			continue;
++		Item *item = derefItem(it->_key);
++		if (!item || item->parent == bi.home)
++			continue;   // 還在板上,不蓋
++		byte cork = chtSampleCork(bg, bgPitch, bgW, bgH, bi.x, bi.y, bi.w, bi.h);
++		if (cork == 0)
++			continue;   // 取不到底色(外圈全透明),保守不蓋
++		int x0 = bi.x * 2, y0 = bi.y * 2, x1 = (bi.x + bi.w) * 2, y1 = (bi.y + bi.h) * 2;
++		for (int yy = y0; yy < y1; yy++) {
++			if (yy < 0 || yy >= _scaleBuf->h) continue;
++			for (int xx = x0; xx < x1; xx++) {
++				if (xx < 0 || xx >= _scaleBuf->w) continue;
++				hp[yy * hpitch + xx] = cork;
++			}
++		}
++	}
 +}
 +
 +// ===== 非上游: 現代玩家友善化 — 動態自動地圖(WW) =====
@@ -823,7 +910,7 @@ index 3cb73123..193d8e4e 100644
  			uint8 ptch = 16;
  			uint16 *dst1 = &((uint16*)_mouseData)[16 * 16 * 2 - 1];
 diff --git a/engines/agos/draw.cpp b/engines/agos/draw.cpp
-index 944797f9..717b8c98 100644
+index 944797f9..667d2f7c 100644
 --- a/engines/agos/draw.cpp
 +++ b/engines/agos/draw.cpp
 @@ -19,6 +19,7 @@
@@ -834,12 +921,14 @@ index 944797f9..717b8c98 100644
  #include "common/endian.h"
  #include "common/system.h"
  
-@@ -840,6 +841,25 @@ void AGOSEngine::displayScreen() {
+@@ -840,6 +841,27 @@ void AGOSEngine::displayScreen() {
  		}
  	}
  
 +	if (_chtActive && (getGameType() == GType_WW || getGameType() == GType_ELVIRA2) && _currentRoom)
 +		_chtVisited[_currentRoom] = 1;   // 非上游: 記錄走過的房間(探索迷霧)
++	if (_chtActive && _chtHires && _scaleBuf && (getGameType() == GType_WW || getGameType() == GType_ELVIRA2))
++		chtEraseTakenBoardItems();   // 非上游: 佈告欄類取走物品後蓋掉烘死美術(見 docs/NOTICE_BOARD_MECHANIC.md)
 +	if (_chtMapOn)
 +		chtDrawMap();   // 非上游: 動態地圖每幀重繪(覆蓋 clearWindow 對疊層的抹除)
 +	else if (_chtVerbId)
@@ -1184,6 +1273,24 @@ index 738744d7..97aa3715 100644
  	SubroutineLine *sl = (SubroutineLine *)((byte *)sub + sub->first);
  
  	const byte *old_code_ptr = _codePtr;
+diff --git a/engines/agos/verb.cpp b/engines/agos/verb.cpp
+index f2212260..72c4ee69 100644
+--- a/engines/agos/verb.cpp
++++ b/engines/agos/verb.cpp
+@@ -537,6 +537,13 @@ void AGOSEngine::defineBox(int id, int x, int y, int width, int height, int flag
+ 		ha->priority = 50;
+ 	}
+ 
++	// 非上游: 記錄「烘死美術上的可取物品」(拖曳框 + verb 208 + 有 item)。這種物品畫在背景圖上，
++	// 取走後原版不擦圖 → 記下位置與原容器,供 chtEraseTakenBoardItems 取走後蓋掉。
++	if (_chtActive && (getGameType() == GType_WW || getGameType() == GType_ELVIRA2) &&
++	    itemPtr && (flags & kBFDragBox) && (verb & ~0x4000) == 208) {
++		chtRecordBoardItem(itemPtrToID(itemPtr), x, y, width, height, itemPtr->parent);
++	}
++
+ 	_needHitAreaRecalc++;
+ }
+ 
 diff --git a/engines/agos/vga.cpp b/engines/agos/vga.cpp
 index 15eb01c4..cc2b5c46 100644
 --- a/engines/agos/vga.cpp

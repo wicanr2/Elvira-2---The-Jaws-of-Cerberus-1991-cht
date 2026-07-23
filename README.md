@@ -165,6 +165,8 @@ AGOS 引擎（Elvira 1/2、Waxworks、Simon 1/2）的文字渲染是為英文小
 | [防拷破解：符號碼防拷根因與修正](docs/COPY_PROTECTION_FIX.md) | 保全鍵盤／電子鎖門防拷為什麼引擎旗標關不掉、逆向過程、修正做法 |
 | [除錯紀錄：疊層對齊與片頭跳過](docs/BUGFIX_NOTES.md) | 玩家回報問題的根因（中文短於英文→文字離開點擊框）、片頭 Enter 跳過、能力值八屬性對照 |
 | [釋出狀況：玩家回報修正批次](docs/RELEASE_STATUS.md) | 各回報問題的修正／釋出狀態總覽、三平台包狀態、如何取得修正 |
+| [佈告欄取物調查](docs/NOTICE_BOARD_MECHANIC.md) | 「拿走了板上還是有」的根因（烘死美術＋動態點擊框）、板上 14 件物品座標、繁中版視覺修正 |
+| [原始發行版本考](docs/ELVIRA2_RELEASES.md) | Elvira 2 當年 DOS/Amiga/ST/C64 各版、五語在地化、ScummVM 指紋、為何本專案基於 floppy 英文版 |
 | [手冊要點索引](docs/MANUAL.md) | 開場流程、四職業、八屬性、法術調配、友善化熱鍵（整理自軟體世界中文說明書）|
 | [開發環境重建指南](docs/DEV_SETUP.md) | 佈局、改譯文重烘、改引擎重生 patch、headless 驗證、打包 |
 | [背景研究資料](docs/elvira2_research.md) | 劇情、人物、系統、當年評價（含來源）|
