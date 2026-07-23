@@ -1025,6 +1025,23 @@ index 008162eb..ed1eed9d 100644
  	for (i = 111; i != 115; i++)
  		disableBox(i);
  
+diff --git a/engines/agos/metaengine.cpp b/engines/agos/metaengine.cpp
+index be2d5090..72be4c08 100644
+--- a/engines/agos/metaengine.cpp
++++ b/engines/agos/metaengine.cpp
+@@ -245,6 +245,12 @@ Common::KeymapArray AgosMetaEngine::initKeymaps(const char *target) const {
+ 	act->setCustomEngineActionEvent(kActionExitCutscene);
+ 	act->addDefaultInputMapping("ESCAPE");
+ 	act->addDefaultInputMapping("JOY_Y");
++	// 非上游: Elvira/Waxworks 原版手冊記載按 Enter 可跳過片頭, ScummVM 只綁 ESCAPE。
++	// 補上 RETURN/KP_ENTER 以符合手冊與玩家預期 (Enter 在 cutscene 期間無其他用途)。
++	if (gameId == "elvira1" || gameId == "elvira2" || gameId == "waxworks") {
++		act->addDefaultInputMapping("RETURN");
++		act->addDefaultInputMapping("KP_ENTER");
++	}
+ 	if (gameId == "simon2" || gameId == "feeble")
+ 		act->addDefaultInputMapping("F5");
+ 	engineKeyMap->addAction(act);
 diff --git a/engines/agos/module.mk b/engines/agos/module.mk
 index 37432e1e..be4c4ce4 100644
 --- a/engines/agos/module.mk
@@ -1038,7 +1055,7 @@ index 37432e1e..be4c4ce4 100644
  	charset-fontdata.o \
  	contain.o \
 diff --git a/engines/agos/saveload.cpp b/engines/agos/saveload.cpp
-index b2095d1e..4211b944 100644
+index b2095d1e..aa0e2ba9 100644
 --- a/engines/agos/saveload.cpp
 +++ b/engines/agos/saveload.cpp
 @@ -1018,6 +1018,17 @@ void AGOSEngine::fileError(WindowBlock *window, bool saveError) {
@@ -1059,6 +1076,18 @@ index b2095d1e..4211b944 100644
  	if (getGameType() == GType_ELVIRA1) {
  		printScroll();
  		window->textColumn = 0;
+@@ -1463,6 +1474,11 @@ bool AGOSEngine_Elvira2::loadGame(const Common::String &filename, bool restartMo
+ 		setBitFlag(135, 1);
+ 	}
+ 
++	// 非上游: 載入後清掉 hi-res 疊層殘留(如「讀取遊戲」字樣殘留在 _scaleBuf)。
++	if (_chtActive && _chtHires && _scaleBuf) {
++		memset(_scaleBuf->getPixels(), 0, _scaleBuf->pitch * _scaleBuf->h);
++	}
++
+ 	return true;
+ }
+ 
 diff --git a/engines/agos/string.cpp b/engines/agos/string.cpp
 index 1aa590b8..9b444177 100644
 --- a/engines/agos/string.cpp

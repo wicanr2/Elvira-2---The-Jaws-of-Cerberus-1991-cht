@@ -58,6 +58,7 @@ manual/
 # === 建置產物 / 大檔 ===
 build/scummvm-src/
 dist-all/
+dist-macos-artifact/
 screenshots/
 run_game/dumps/
 *.mp4
