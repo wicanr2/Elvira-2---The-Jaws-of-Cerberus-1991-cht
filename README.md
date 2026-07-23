@@ -24,6 +24,12 @@
   </a>
 </p>
 
+## 🎡 線上試玩：中文密碼盤
+
+當年防拷用的三層密碼盤，做成可轉動的線上還原（中文中心、三層皆可轉、幾何視窗透視真實數字、附解謎小遊戲）：
+
+**➡ [開啟線上密碼盤](https://wicanr2.github.io/Elvira-2---The-Jaws-of-Cerberus-1991-cht/codewheel/)**　·　[專案入口站](https://wicanr2.github.io/Elvira-2---The-Jaws-of-Cerberus-1991-cht/)
+
 ---
 
 ## 遊戲介紹 — 當年軟體世界的邀請函
@@ -173,7 +179,7 @@ AGOS 引擎（Elvira 1/2、Waxworks、Simon 1/2）的文字渲染是為英文小
 | [釋出狀況：玩家回報修正批次](docs/RELEASE_STATUS.md) | 各回報問題的修正／釋出狀態總覽、三平台包狀態、如何取得修正 |
 | [佈告欄取物調查](docs/NOTICE_BOARD_MECHANIC.md) | 「拿走了板上還是有」的根因（烘死美術＋動態點擊框）、板上 14 件物品座標、繁中版視覺修正 |
 | [原始發行版本考](docs/ELVIRA2_RELEASES.md) | Elvira 2 當年 DOS/Amiga/ST/C64 各版、五語在地化、ScummVM 指紋、為何本專案基於 floppy 英文版 |
-| [中文密碼盤（線上還原）](docs/codewheel/index.html) | 當年防拷三層密碼盤的線上還原：中文中心、三層可轉動、幾何視窗透視真實數字、附解謎小遊戲 |
+| [中文密碼盤（線上還原）](https://wicanr2.github.io/Elvira-2---The-Jaws-of-Cerberus-1991-cht/codewheel/) | 當年防拷三層密碼盤的線上還原：中文中心、三層可轉動、幾何視窗透視真實數字、附解謎小遊戲 |
 | [手冊要點索引](docs/MANUAL.md) | 開場流程、四職業、八屬性、法術調配、友善化熱鍵（整理自軟體世界中文說明書）|
 | [開發環境重建指南](docs/DEV_SETUP.md) | 佈局、改譯文重烘、改引擎重生 patch、headless 驗證、打包 |
 | [背景研究資料](docs/elvira2_research.md) | 劇情、人物、系統、當年評價（含來源）|
