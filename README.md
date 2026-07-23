@@ -152,7 +152,7 @@ AGOS 引擎（Elvira 1/2、Waxworks、Simon 1/2）的文字渲染是為英文小
 - **高解析雙層畫布**：沿用引擎原本給 Elvira 1 PC98 日文版的 `_backBuf`(320×200) + `_scaleBuf`(640×400) 疊層機制，把中文畫在高解析層 → 原生點陣、相對變小、清晰。
 - **雙位元組視窗文字**：改 `windowPutChar` 認 Big5 lead byte、正確前進欄寬。
 - **存讀檔中文分支**：`saveload.cpp` 加 Big5 訊息。
-- **防拷自動繞過**：Elvira 2 的防拷藏在遊戲 bytecode 裡（不是引擎旗標關得掉的），沒手冊會卡死。繁中版在腳本執行入口攔截、自動通過。完整根因與逆向過程見 **[防拷破解技術文件 →](docs/COPY_PROTECTION_FIX.md)**。
+- **防拷自動繞過**：Elvira 2 的防拷藏在遊戲 bytecode 裡（不是引擎旗標關得掉的），沒手冊會卡死。繁中版在腳本執行入口攔截、自動通過。完整根因與逆向過程見 **[防拷破解技術文件 →](docs/COPY_PROTECTION_FIX.md)**。當年那張防拷密碼盤也做成了線上還原版（中文中心、可轉動、附解謎）：**[中文密碼盤（線上還原）→](docs/codewheel/index.html)**。
 - **佈告欄取物殘留修正**：原版把物品「畫死」在背景美術上，取走後圖不會消失（ScummVM 上的原版行為）。繁中版在引擎層蓋掉取走物品的美術，讓它同步消失。逆向與座標見 **[佈告欄取物調查 →](docs/NOTICE_BOARD_MECHANIC.md)**。
 
 <p align="center">
@@ -173,6 +173,7 @@ AGOS 引擎（Elvira 1/2、Waxworks、Simon 1/2）的文字渲染是為英文小
 | [釋出狀況：玩家回報修正批次](docs/RELEASE_STATUS.md) | 各回報問題的修正／釋出狀態總覽、三平台包狀態、如何取得修正 |
 | [佈告欄取物調查](docs/NOTICE_BOARD_MECHANIC.md) | 「拿走了板上還是有」的根因（烘死美術＋動態點擊框）、板上 14 件物品座標、繁中版視覺修正 |
 | [原始發行版本考](docs/ELVIRA2_RELEASES.md) | Elvira 2 當年 DOS/Amiga/ST/C64 各版、五語在地化、ScummVM 指紋、為何本專案基於 floppy 英文版 |
+| [中文密碼盤（線上還原）](docs/codewheel/index.html) | 當年防拷三層密碼盤的線上還原：中文中心、三層可轉動、幾何視窗透視真實數字、附解謎小遊戲 |
 | [手冊要點索引](docs/MANUAL.md) | 開場流程、四職業、八屬性、法術調配、友善化熱鍵（整理自軟體世界中文說明書）|
 | [開發環境重建指南](docs/DEV_SETUP.md) | 佈局、改譯文重烘、改引擎重生 patch、headless 驗證、打包 |
 | [背景研究資料](docs/elvira2_research.md) | 劇情、人物、系統、當年評價（含來源）|
