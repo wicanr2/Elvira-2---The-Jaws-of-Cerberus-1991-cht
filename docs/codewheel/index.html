@@ -5,50 +5,76 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>艾薇拉 II 恐怖劇場 — 中文密碼盤（線上還原）</title>
 <style>
-  :root{ --bg:#0d0a10; --panel:#191322; --ink:#e9e2d0; --sub:#b3a9c4; --gold:#e0b04a; --blood:#a01e2a; --line:#2c2438; }
+  :root{
+    --bg0:#050307; --bg1:#1a0608; --panel:#140a10; --panel2:#0c0509;
+    --ink:#ede4d2; --sub:#b199a0; --gold:#d8a63f; --blood:#8b0f16; --blood2:#c21f22;
+    --line:#3a1418; --glow:#6e0d12;
+  }
   *{box-sizing:border-box}
-  html,body{margin:0;background:radial-gradient(1200px 800px at 50% -10%, #241a2e, var(--bg));color:var(--ink);
-    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
-  a{color:var(--gold)}
-  header{padding:22px 16px 6px;text-align:center}
-  header h1{margin:0;font-size:clamp(20px,3.4vw,30px);letter-spacing:.06em;
-    font-family:"Noto Serif TC",serif;color:var(--gold);text-shadow:0 2px 12px #000}
-  header .sub{color:var(--sub);font-size:13px;margin-top:6px}
-  .wrap{max-width:1100px;margin:0 auto;padding:12px 16px 60px;display:grid;grid-template-columns:1fr 340px;gap:22px}
-  @media(max-width:860px){.wrap{grid-template-columns:1fr}}
-  .stage{background:linear-gradient(180deg,#140f1c,#0c0813);border:1px solid var(--line);border-radius:16px;
-    padding:14px;box-shadow:0 20px 60px #000 inset, 0 6px 30px #0008}
-  .wheelbox{position:relative;width:100%;max-width:560px;margin:0 auto;aspect-ratio:1/1}
-  canvas{width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+  html,body{margin:0;min-height:100%;
+    background:
+      radial-gradient(1000px 700px at 50% 120%, #2a0709 0%, transparent 60%),
+      radial-gradient(900px 600px at 50% -20%, #240a12 0%, transparent 55%),
+      linear-gradient(180deg,#0a0508 0%, var(--bg0) 100%);
+    color:var(--ink);
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:radial-gradient(120% 120% at 50% 50%, transparent 58%, #000000cc 100%);}
+  body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.05;
+    background-image:repeating-linear-gradient(0deg,#000 0 2px,transparent 2px 4px);}
+  a{color:var(--gold);text-decoration:none} a:hover{text-decoration:underline}
+  header{padding:26px 16px 4px;text-align:center;position:relative;z-index:1}
+  header h1{margin:0;font-size:clamp(22px,3.6vw,34px);letter-spacing:.05em;
+    font-family:"Noto Serif TC",serif;font-weight:900;color:#e7c96a;
+    text-shadow:0 0 18px #b3101799, 0 2px 0 #3a0a0c, 0 3px 14px #000}
+  header .sub{color:var(--sub);font-size:13px;margin-top:8px;letter-spacing:.03em}
+  .wrap{max-width:1120px;margin:0 auto;padding:14px 16px 60px;display:grid;
+    grid-template-columns:1fr 350px;gap:24px;position:relative;z-index:1}
+  @media(max-width:880px){.wrap{grid-template-columns:1fr}}
+  .stage{position:relative;border-radius:18px;padding:16px;
+    background:linear-gradient(180deg,#1a0c11,#0a0509);
+    border:1px solid var(--line);
+    box-shadow:0 0 0 1px #000 inset, 0 30px 80px #000, 0 0 60px #4a070a55}
+  .wheelbox{position:relative;width:100%;max-width:580px;margin:0 auto;aspect-ratio:1/1}
+  .wheelbox::before{content:"";position:absolute;inset:-6%;border-radius:50%;z-index:0;
+    background:radial-gradient(circle at 50% 46%, #e7b24a22 0%, #a3121a22 34%, transparent 66%);
+    filter:blur(6px);animation:flicker 4.5s ease-in-out infinite}
+  @keyframes flicker{0%,100%{opacity:.85}45%{opacity:1}55%{opacity:.7}70%{opacity:.95}}
+  canvas{position:relative;z-index:1;width:100%;height:100%;display:block;touch-action:none;cursor:grab;
+    filter:drop-shadow(0 10px 30px #000) drop-shadow(0 0 24px #5a0a0e88)}
   canvas.drag{cursor:grabbing}
-  .pointer{position:absolute;top:-2px;left:50%;transform:translateX(-50%);width:0;height:0;
-    border-left:12px solid transparent;border-right:12px solid transparent;border-top:20px solid var(--blood);
-    filter:drop-shadow(0 2px 3px #000);z-index:5}
-  .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:12px}
-  .seg{display:flex;background:#0c0813;border:1px solid var(--line);border-radius:10px;overflow:hidden}
-  .seg button{background:none;border:0;color:var(--ink);padding:8px 12px;cursor:pointer;font-size:14px}
-  .seg button:hover{background:#241a2e}
-  .seg button.on{background:var(--blood);color:#fff}
-  .btn{background:#241a2e;border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:9px 14px;
-    cursor:pointer;font-size:14px}
-  .btn:hover{border-color:var(--gold)}
-  .btn.gold{background:var(--gold);color:#241a0a;border-color:var(--gold);font-weight:700}
-  .panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
-  .panel h2{margin:0 0 10px;font-size:16px;color:var(--gold);font-family:"Noto Serif TC",serif}
-  .task{font-size:14px;line-height:1.9}
+  .pointer{position:absolute;top:-4px;left:50%;transform:translateX(-50%);width:0;height:0;z-index:6;
+    border-left:13px solid transparent;border-right:13px solid transparent;border-top:22px solid var(--blood2);
+    filter:drop-shadow(0 0 6px #c21f22) drop-shadow(0 2px 2px #000)}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px;position:relative;z-index:2}
+  .seg{display:flex;background:#0a0509;border:1px solid var(--line);border-radius:11px;overflow:hidden}
+  .seg button{background:none;border:0;color:var(--ink);padding:9px 12px;cursor:pointer;font-size:13.5px}
+  .seg button:hover{background:#2a0d12}
+  .seg button.on{background:linear-gradient(180deg,var(--blood2),var(--blood));color:#fff;text-shadow:0 1px 2px #000}
+  .btn{background:#1c0d12;border:1px solid var(--line);color:var(--ink);border-radius:11px;padding:9px 14px;
+    cursor:pointer;font-size:13.5px}
+  .btn:hover{border-color:var(--gold);color:#fff}
+  .btn.gold{background:linear-gradient(180deg,#e7c96a,#c8901f);color:#2a1405;border-color:#e7c96a;font-weight:800}
+  .panel{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);
+    border-radius:15px;padding:17px;box-shadow:0 10px 40px #000a}
+  .panel h2{margin:0 0 10px;font-size:16px;color:#e7c96a;font-family:"Noto Serif TC",serif;
+    text-shadow:0 0 10px #7a0c1055}
+  .task{font-size:14px;line-height:1.95}
   .task b{color:#fff}
-  .chip{display:inline-block;background:#0c0813;border:1px solid var(--line);border-radius:8px;padding:2px 8px;margin:1px 2px;color:var(--gold)}
-  .steps{margin:10px 0 0;padding-left:18px;font-size:13px;color:var(--sub);line-height:1.8}
-  .steps li.done{color:#6ad089;text-decoration:none}
+  .chip{display:inline-block;background:#26040a;border:1px solid #58141a;border-radius:8px;padding:2px 9px;
+    margin:2px;color:#f0c968;font-weight:600}
+  .steps{margin:12px 0 0;padding-left:18px;font-size:13px;color:var(--sub);line-height:1.85}
+  .steps li.done{color:#7bd68f}
   .steps li.done::marker{content:"✓ "}
-  .verdict{margin-top:12px;font-size:15px;font-weight:700;min-height:22px}
-  .ok{color:#6ad089}.no{color:#e0724a}
-  .small{font-size:12px;color:var(--sub);line-height:1.7}
-  .divider{height:1px;background:var(--line);margin:14px 0}
-  code{background:#0c0813;padding:1px 6px;border-radius:6px;color:var(--gold)}
-  .foot{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--sub);font-size:12px;line-height:1.8}
-  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--sub);justify-content:center;margin-top:8px}
-  .legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:4px}
+  .verdict{margin-top:12px;font-size:15px;font-weight:700;min-height:22px;line-height:1.7}
+  .ok{color:#7bd68f}.no{color:#e0724a}
+  .small{font-size:12.5px;color:var(--sub);line-height:1.85}
+  .divider{height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);margin:14px 0}
+  .foot{max-width:1120px;margin:0 auto;padding:0 16px 46px;color:#8a6a70;font-size:12px;line-height:1.8;
+    position:relative;z-index:1;text-align:center}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--sub);justify-content:center;margin-top:10px}
+  .legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:5px}
 </style>
 </head>
 <body>
@@ -65,27 +91,28 @@
     </div>
     <div class="controls">
       <div class="seg" id="layerSeg" title="選擇要轉動的盤">
+        <button data-l="0">轉底層（圖示）</button>
         <button data-l="1" class="on">轉中層（怪物）</button>
         <button data-l="2">轉頂層（職稱）</button>
       </div>
-      <button class="btn" id="ccw">↺ 逆轉一格</button>
-      <button class="btn" id="cw">↻ 順轉一格</button>
+      <button class="btn" id="ccw">↺ 逆轉</button>
+      <button class="btn" id="cw">↻ 順轉</button>
       <button class="btn" id="reset">歸零</button>
     </div>
     <div class="legend">
       <span><i style="background:#c9a24a"></i>底層 w0：16 圖示 + 密碼數字</span>
-      <span><i style="background:#7a5ca8"></i>中層 w1：12 怪物 + 視窗</span>
-      <span><i style="background:#4a7a5c"></i>頂層 w2：職稱 + 法術 + 中文中心</span>
+      <span><i style="background:#8e3a44"></i>中層 w1：12 怪物 + 視窗</span>
+      <span><i style="background:#c8901f"></i>頂層 w2：職稱 + 法術 + 中文中心</span>
     </div>
   </div>
 
   <div>
     <div class="panel">
       <h2>🎲 解謎小遊戲</h2>
-      <div id="taskArea" class="task">按「出題」開始。系統會給你當年防拷會問的四個線索，轉動雙盤對齊、讀出密碼。</div>
+      <div id="taskArea" class="task">按「出題」開始。系統會給你當年防拷會問的四個線索，轉動轉盤對齊、讀出密碼。</div>
       <ol class="steps" id="steps" style="display:none">
-        <li id="s1">轉<b>中層</b>：把指定<b>怪物</b>對到指定<b>圖示</b></li>
-        <li id="s2">轉<b>頂層</b>：把指定<b>職稱</b>對到那隻<b>怪物</b></li>
+        <li id="s1">把指定<b>怪物</b>對到指定<b>圖示</b>（轉中層或底層）</li>
+        <li id="s2">把指定<b>職稱</b>對到那隻<b>怪物</b>（轉頂層）</li>
         <li id="s3">讀出指定<b>法術</b>視窗中的 4 位數密碼</li>
       </ol>
       <div class="verdict" id="verdict"></div>
@@ -102,143 +129,103 @@
         你得轉盤對齊、從視窗讀出 4 位數密碼輸入，答錯累計會被踢出遊戲。沒有這張盤（或說明書）就玩不下去。
         <div class="divider"></div>
         <b>繁體中文版已在引擎層自動通過此防拷</b>，不需要這張盤——這裡純為還原與懷舊。
-        修正根因見 <a href="../COPY_PROTECTION_FIX.md">防拷破解技術文件</a>、
-        轉盤與遊戲機制見 <a href="../NOTICE_BOARD_MECHANIC.md">佈告欄取物調查</a>。
+        修正根因見 <a href="https://github.com/wicanr2/Elvira-2---The-Jaws-of-Cerberus-1991-cht/blob/master/docs/COPY_PROTECTION_FIX.md">防拷破解技術文件</a>。
         <div class="divider"></div>
-        操作：用滑鼠<b>拖曳</b>轉盤即可旋轉（先選要轉哪一層），或用下方按鈕一格一格轉。
+        操作：先選要轉哪一層（<b>底/中/頂三層皆可轉</b>），再用滑鼠<b>拖曳轉盤</b>或按鈕旋轉。
       </div>
     </div>
   </div>
 </div>
 
 <div class="foot">
-  轉盤圖為當年防拷盤還原、中心置換為繁中在地化標題；底/中/頂三層數字與標籤沿用原盤。本頁不含遊戲原始資料檔。© 1991 Accolade Inc. — 繁體中文化：wicanr2。
+  轉盤圖為當年防拷盤還原、中心置換為繁中在地化標題；三層數字與標籤沿用原盤。本頁不含遊戲原始資料檔。© 1991 Accolade Inc. — 繁體中文化：wicanr2。
 </div>
 
 <script>
-const R = 400;                        // disc radius space (canvas 800, center 400,400)
-const CX = 400, CY = 400;
-// ---- 標籤資料（順時針，12 點鐘=0°）----
-const MONSTERS = ["Piranha","Goblin","Skeleton","Necromancer","Werewolf","Mummies","Vampire","Zombie","Ghost","Ghoul","Spider","Banshee"];
-const TITLES   = ["Editor","Grip","Gaffer","Musician","Stuntman","Animator","Double","Producer","Writer","Actor","Director","Best Boy"];
-const SPELLS   = ["Ice Dart","Illusion","Holy Blast","Bless","Trueflight","Brainboost","Courage","Telekinesis","Fireball","Glue","Nova","Protection","Mindlock","Healing","Luck","Fear"];
-const NSYM = 16;                      // w0 圖示數
-const A_MON = i => i*30, A_TIT = i => i*30, A_SYM = i => i*22.5;
+const R=400, CX=400, CY=400;
+const MONSTERS=["Piranha","Goblin","Skeleton","Necromancer","Werewolf","Mummies","Vampire","Zombie","Ghost","Ghoul","Spider","Banshee"];
+const TITLES=["Editor","Grip","Gaffer","Musician","Stuntman","Animator","Double","Producer","Writer","Actor","Director","Best Boy"];
+const SPELLS=["Ice Dart","Illusion","Holy Blast","Bless","Trueflight","Brainboost","Courage","Telekinesis","Fireball","Glue","Nova","Protection","Mindlock","Healing","Luck","Fear"];
+const NSYM=16;
+const A_MON=i=>i*30, A_TIT=i=>i*30, A_SYM=i=>i*22.5;
+const WIN_W2=Array.from({length:12},(_,i)=>({a:i*30,half:12,r0:0.46,r1:0.63}));
+const WIN_W1=Array.from({length:12},(_,i)=>({a:i*30+15,half:10,r0:0.34,r1:0.60}));
 
-// ---- 視窗幾何（半徑用 R 比例, 角度中心=各扇區, 寬度±deg）。可微調 ----
-// w2 頂層：每個職稱扇區一個外側曲槽（透視看 w1 數字）
-const WIN_W2 = Array.from({length:12}, (_,i)=>({a:i*30, half:12, r0:0.46, r1:0.63}));
-// w1 中層：每個怪物扇區一個中段曲槽（透視看 w0 數字）
-const WIN_W1 = Array.from({length:12}, (_,i)=>({a:i*30+15, half:10, r0:0.34, r1:0.60}));
+const cv=document.getElementById('cv'), ctx=cv.getContext('2d');
+const imgs={}; let loaded=0;
+let r0=0, r1=0, r2=0, activeLayer=1, quiz=null;
 
-const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
-const imgs = {}; let loaded = 0;
-let r1 = 0, r2 = 0;                   // 中層/頂層旋轉角
-let activeLayer = 1;
-let quiz = null;
-
-// 打孔：回傳一張「視窗處透明」的離屏 disc
-function maskedDisc(img, wins){
-  const c = document.createElement('canvas'); c.width=800; c.height=800;
-  const g = c.getContext('2d');
-  g.drawImage(img,0,0,800,800);
-  g.globalCompositeOperation = 'destination-out';
+function maskedDisc(img,wins){
+  const c=document.createElement('canvas'); c.width=800; c.height=800;
+  const g=c.getContext('2d'); g.drawImage(img,0,0,800,800);
+  g.globalCompositeOperation='destination-out';
   for(const w of wins){
-    const a0 = (w.a - w.half - 90)*Math.PI/180, a1 = (w.a + w.half - 90)*Math.PI/180;
-    g.beginPath();
-    g.arc(CX,CY, w.r1*R, a0, a1);
-    g.arc(CX,CY, w.r0*R, a1, a0, true);
-    g.closePath(); g.fill();
+    const a0=(w.a-w.half-90)*Math.PI/180, a1=(w.a+w.half-90)*Math.PI/180;
+    g.beginPath(); g.arc(CX,CY,w.r1*R,a0,a1); g.arc(CX,CY,w.r0*R,a1,a0,true); g.closePath(); g.fill();
   }
-  g.globalCompositeOperation = 'source-over';
-  return c;
+  g.globalCompositeOperation='source-over'; return c;
 }
 let w1m=null, w2m=null;
 
+function drawRot(c,deg){ ctx.save(); ctx.translate(CX,CY); ctx.rotate(deg*Math.PI/180); ctx.translate(-CX,-CY); ctx.drawImage(c,0,0); ctx.restore(); }
 function draw(){
   ctx.clearRect(0,0,800,800);
-  // 底層 w0（固定）
-  ctx.drawImage(imgs.w0,0,0,800,800);
-  // 中層 w1（旋轉 r1，視窗透明）
+  drawRot(imgs.w0, r0);
   drawRot(w1m, r1);
-  // 頂層 w2（旋轉 r2，視窗透明）
   drawRot(w2m, r2);
-  // 出題時：標示目標圖示（w0 上）與法術視窗
-  if(quiz){
-    markSymbol(quiz.sym);
-    if(solved()) markSpellWindow(quiz.spellIdx);
-  }
+  if(quiz){ markSymbol(quiz.sym); if(solved()) markSpellWindow(quiz.spellIdx); }
 }
-function drawRot(c, deg){
-  ctx.save(); ctx.translate(CX,CY); ctx.rotate(deg*Math.PI/180); ctx.translate(-CX,-CY);
-  ctx.drawImage(c,0,0); ctx.restore();
-}
-function polar(angDeg, rNorm){
-  const a=(angDeg-90)*Math.PI/180; return [CX+Math.cos(a)*rNorm*R, CY+Math.sin(a)*rNorm*R];
-}
+function polar(angDeg,rNorm){ const a=(angDeg-90)*Math.PI/180; return [CX+Math.cos(a)*rNorm*R, CY+Math.sin(a)*rNorm*R]; }
 function markSymbol(i){
-  const [x,y]=polar(A_SYM(i), 0.92);
-  ctx.save(); ctx.strokeStyle='#e0b04a'; ctx.lineWidth=6; ctx.beginPath();
-  ctx.arc(x,y,34,0,7); ctx.stroke();
-  ctx.fillStyle='rgba(224,176,74,.15)'; ctx.fill(); ctx.restore();
+  const [x,y]=polar(A_SYM(i)+r0, 0.92);
+  ctx.save(); ctx.strokeStyle='#e7c96a'; ctx.lineWidth=6; ctx.shadowColor='#c21f22'; ctx.shadowBlur=12;
+  ctx.beginPath(); ctx.arc(x,y,34,0,7); ctx.stroke();
+  ctx.shadowBlur=0; ctx.fillStyle='rgba(231,201,106,.14)'; ctx.fill(); ctx.restore();
 }
 function markSpellWindow(i){
-  // 法術在頂層，隨 r2 轉；用其扇區的視窗位置標紅
-  const winA = (i*22.5) + r2;      // 近似：法術視窗跟著頂層轉
-  const [x,y]=polar(winA, 0.55);
+  const [x,y]=polar(i*22.5+r2, 0.55);
   ctx.save(); ctx.strokeStyle='#e0724a'; ctx.lineWidth=5; ctx.setLineDash([6,4]);
   ctx.beginPath(); ctx.arc(x,y,30,0,7); ctx.stroke(); ctx.restore();
 }
 
-// ---- 對齊判定 ----
-const norm = d => ((d%360)+360)%360;
-const near = (a,b,tol=9) => { let d=Math.abs(norm(a)-norm(b)); if(d>180)d=360-d; return d<=tol; };
-function step1ok(){ return quiz && near(r1, A_SYM(quiz.sym)-A_MON(quiz.mon)); }
-function step2ok(){ return quiz && near(r2, A_MON(quiz.mon)+r1 - A_TIT(quiz.tit)); }
-function solved(){ return step1ok() && step2ok(); }
+const norm=d=>((d%360)+360)%360;
+const near=(a,b,tol=9)=>{let d=Math.abs(norm(a)-norm(b)); if(d>180)d=360-d; return d<=tol;};
+function step1ok(){ return quiz && near(A_MON(quiz.mon)+r1, A_SYM(quiz.sym)+r0); }
+function step2ok(){ return quiz && near(A_TIT(quiz.tit)+r2, A_MON(quiz.mon)+r1); }
+function solved(){ return step1ok()&&step2ok(); }
 
 function updateVerdict(){
-  if(!quiz){return;}
+  if(!quiz)return;
   document.getElementById('s1').classList.toggle('done', step1ok());
   document.getElementById('s2').classList.toggle('done', step1ok()&&step2ok());
   const v=document.getElementById('verdict');
-  if(solved()){
-    v.className='verdict ok';
-    v.innerHTML='✓ 對齊完成！讀出<b>'+quiz.spell+'</b>視窗中的 4 位數字，那就是密碼。';
-  }else if(step1ok()){
-    v.className='verdict'; v.innerHTML='中層 OK，接著轉<b>頂層</b>把職稱對到怪物。';
-  }else{
-    v.className='verdict'; v.innerHTML='';
-  }
+  if(solved()){ v.className='verdict ok'; v.innerHTML='✓ 對齊完成！讀出<b>'+quiz.spell+'</b>視窗中的 4 位數字，那就是密碼。'; }
+  else if(step1ok()){ v.className='verdict'; v.innerHTML='怪物已對到圖示，接著轉<b>頂層</b>把職稱對到怪物。'; }
+  else{ v.className='verdict'; v.innerHTML=''; }
 }
-
 function newQuiz(){
   const rnd=n=>Math.floor(Math.random()*n);
   const spellIdx=rnd(SPELLS.length);
-  quiz={ sym:rnd(NSYM), mon:rnd(12), tit:rnd(12), spellIdx, spell:SPELLS[spellIdx] };
-  document.getElementById('steps').style.display='';
-  document.getElementById('hint').style.display='';
-  document.getElementById('s1').classList.remove('done');
-  document.getElementById('s2').classList.remove('done');
-  document.getElementById('taskArea').innerHTML =
-    '防拷提問：把中層的怪物 <span class="chip">'+MONSTERS[quiz.mon]+'</span> 對到底盤上<span class="chip">🎯 金圈標示的圖示</span>；'+
+  quiz={sym:rnd(NSYM),mon:rnd(12),tit:rnd(12),spellIdx,spell:SPELLS[spellIdx]};
+  document.getElementById('steps').style.display=''; document.getElementById('hint').style.display='';
+  document.getElementById('s1').classList.remove('done'); document.getElementById('s2').classList.remove('done');
+  document.getElementById('taskArea').innerHTML=
+    '防拷提問：把中層怪物 <span class="chip">'+MONSTERS[quiz.mon]+'</span> 對到底盤上 <span class="chip">🎯 金圈標示的圖示</span>；'+
     '再把頂層職稱 <span class="chip">'+TITLES[quiz.tit]+'</span> 對到那隻怪物；'+
     '最後讀出法術 <span class="chip">'+quiz.spell+'</span> 視窗裡的 <b>4 位數密碼</b>。';
   updateVerdict(); draw();
 }
 function autoSolve(){
   if(!quiz)return;
-  r1 = norm(A_SYM(quiz.sym)-A_MON(quiz.mon));
-  r2 = norm(A_MON(quiz.mon)+r1 - A_TIT(quiz.tit));
+  r1=norm(A_SYM(quiz.sym)+r0 - A_MON(quiz.mon));
+  r2=norm(A_MON(quiz.mon)+r1 - A_TIT(quiz.tit));
   updateVerdict(); draw();
 }
 
-// ---- 旋轉互動 ----
-function stepDeg(){ return activeLayer===1 ? 30 : 30; }
-function rotate(delta){ if(activeLayer===1) r1=norm(r1+delta); else r2=norm(r2+delta); updateVerdict(); draw(); }
-document.getElementById('cw').onclick =()=>rotate(+stepDeg());
-document.getElementById('ccw').onclick=()=>rotate(-stepDeg());
-document.getElementById('reset').onclick=()=>{r1=0;r2=0;updateVerdict();draw();};
+function rotate(delta){ if(activeLayer===0)r0=norm(r0+delta); else if(activeLayer===1)r1=norm(r1+delta); else r2=norm(r2+delta); updateVerdict(); draw(); }
+document.getElementById('cw').onclick=()=>rotate(activeLayer===0?+22.5:+30);
+document.getElementById('ccw').onclick=()=>rotate(activeLayer===0?-22.5:-30);
+document.getElementById('reset').onclick=()=>{r0=r1=r2=0; updateVerdict(); draw();};
 document.getElementById('newq').onclick=newQuiz;
 document.getElementById('hint').onclick=autoSolve;
 document.querySelectorAll('#layerSeg button').forEach(b=>b.onclick=()=>{
@@ -246,26 +233,20 @@ document.querySelectorAll('#layerSeg button').forEach(b=>b.onclick=()=>{
   b.classList.add('on'); activeLayer=+b.dataset.l;
 });
 
-// 拖曳旋轉
-let dragging=false, lastAng=0;
-function angAt(ev){
-  const rect=cv.getBoundingClientRect();
+let dragging=false,lastAng=0;
+function angAt(ev){ const rect=cv.getBoundingClientRect();
   const x=(ev.touches?ev.touches[0].clientX:ev.clientX)-rect.left-rect.width/2;
   const y=(ev.touches?ev.touches[0].clientY:ev.clientY)-rect.top-rect.height/2;
-  return Math.atan2(y,x)*180/Math.PI;
-}
+  return Math.atan2(y,x)*180/Math.PI; }
 function down(ev){dragging=true;lastAng=angAt(ev);cv.classList.add('drag');ev.preventDefault();}
-function move(ev){ if(!dragging)return; const a=angAt(ev); let d=a-lastAng; lastAng=a;
-  if(activeLayer===1) r1=norm(r1+d); else r2=norm(r2+d); updateVerdict(); draw(); ev.preventDefault();}
+function move(ev){ if(!dragging)return; const a=angAt(ev); let d=a-lastAng; lastAng=a; rotate(d); ev.preventDefault(); }
 function up(){dragging=false;cv.classList.remove('drag');}
 cv.addEventListener('mousedown',down); window.addEventListener('mousemove',move); window.addEventListener('mouseup',up);
 cv.addEventListener('touchstart',down,{passive:false}); window.addEventListener('touchmove',move,{passive:false}); window.addEventListener('touchend',up);
 
-// ---- 載入圖 ----
-['w0','w1','w2'].forEach(k=>{
-  const im=new Image(); im.onload=()=>{ imgs[k]=im; if(++loaded===3){ w1m=maskedDisc(imgs.w1,WIN_W1); w2m=maskedDisc(imgs.w2,WIN_W2); draw(); } };
-  im.src=k+'.png';
-});
+['w0','w1','w2'].forEach(k=>{ const im=new Image();
+  im.onload=()=>{ imgs[k]=im; if(++loaded===3){ w1m=maskedDisc(imgs.w1,WIN_W1); w2m=maskedDisc(imgs.w2,WIN_W2); draw(); } };
+  im.src=k+'.png'; });
 </script>
 </body>
 </html>
