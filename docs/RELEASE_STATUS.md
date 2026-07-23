@@ -33,7 +33,7 @@
 |---|---|---|
 | Linux (x86_64) | 已重建（含本批修正）| 已重建・已開機驗證 |
 | Windows (x64) | 已重建（含本批修正）| 已重建 |
-| macOS (universal arm64+x86_64) | CI 重建中（GitHub Action）| 待 CI 完成後本機注入 |
+| macOS (universal arm64+x86_64) | 已重建（GitHub Action，含本批修正）| 已重建（CI universal binary 本機注入遊戲檔）|
 
 - macOS 只能在 macOS runner 上編（見 workflow 註解的踩雷防呆），故走 GitHub Action 產 universal binary，本機再注入遊戲檔組完整包。
 - 對齊類修正（選單／能力值）只動譯表、重烘 `.tab` 即生效，不需重編引擎；片頭 Enter 與讀檔殘留是引擎修正，需重編。
