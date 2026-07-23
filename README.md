@@ -153,6 +153,12 @@ AGOS 引擎（Elvira 1/2、Waxworks、Simon 1/2）的文字渲染是為英文小
 - **雙位元組視窗文字**：改 `windowPutChar` 認 Big5 lead byte、正確前進欄寬。
 - **存讀檔中文分支**：`saveload.cpp` 加 Big5 訊息。
 - **防拷自動繞過**：Elvira 2 的防拷藏在遊戲 bytecode 裡（不是引擎旗標關得掉的），沒手冊會卡死。繁中版在腳本執行入口攔截、自動通過。完整根因與逆向過程見 **[防拷破解技術文件 →](docs/COPY_PROTECTION_FIX.md)**。
+- **佈告欄取物殘留修正**：原版把物品「畫死」在背景美術上，取走後圖不會消失（ScummVM 上的原版行為）。繁中版在引擎層蓋掉取走物品的美術，讓它同步消失。逆向與座標見 **[佈告欄取物調查 →](docs/NOTICE_BOARD_MECHANIC.md)**。
+
+<p align="center">
+  <img src="docs/img/notice_board_fix.gif" alt="取走物品後板上美術同步消失" width="480"><br>
+  <em>實機證明：取走物品後，板上的棕櫚、告示板、肖像、馬克杯同步消失（原版永遠殘留）。</em>
+</p>
 
 > 一個關鍵發現：Elvira 2 (`GType_ELVIRA2`) 和已完成的《蠟像館之謎》(`GType_WW`) 在 ScummVM 裡**同屬一個介面家族**，所以這份 patch 大量沿用了姊妹作的成果，再對位到 Elvira 2 的專屬路徑。
 

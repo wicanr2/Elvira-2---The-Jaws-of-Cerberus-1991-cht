@@ -73,3 +73,6 @@ translations/batches/*.tsv
 
 # 推廣片工作目錄（成品放 dist-all/ 作 release）
 promo/
+
+# 例外: 修補證明圖(自製、無版權)可入庫
+!docs/img/*.gif
